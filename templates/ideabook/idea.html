@@ -1,0 +1,85 @@
+{% extends 'ideabook/base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block breadcrumb %}
+			<li class="breadcrumb-item active">Idea</li>
+{% endblock  %}
+{% block content %}	
+        <div class="container mt-5 mb-5">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-md-10">
+                    <div class="card posts shadow2" id="{{idea.id}}">
+                        <div class="d-flex justify-content-between p-2 px-3">
+                            <div class="d-flex flex-row align-items-center"> <img src="{{idea.idea_user.profile_user.profile_pic.url|default_if_none:'#'}}" width="50" height="50" class="rounded-circle">
+                                <div class="d-flex flex-column ml-2"> <span class="font-weight-bold">{{idea.idea_user}}</span> <small class="mr-2">{{idea.idea_date|naturaltime}}</small> </div>
+                            </div>
+                            
+                            <div class="dropdown">
+                                <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{% url 'edit_idea' idea.id %}">Edit</a>
+                                    <a class="dropdown-item" href="{% url 'delete_idea' idea.id %}" class="delete">Delete</a>
+                                    
+                                  </div>
+                            </div>
+                                    </div>
+                                    <div class="p-2 post-body">
+                                        <p class="text-justify">{{ idea.idea_text }}</a> </p>
+                                        <hr>
+                                        <div class="d-flex post-details">
+                                            <div class="p-2"><span id = heart>
+                                                <form action="{% url 'like_idea' idea.id %}" method="POST">
+                                                    {% csrf_token %}
+                                                    {%if is_liked%}
+                                                    <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart" aria-hidden="true" ></i></button>
+                                                    {% else %}
+                                                    <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart-o" aria-hidden="true" ></i></button>
+                                                    {% endif %}
+                                                </form>
+                                            </span></div>
+                                            <div class="p-2">{{num_likes}} like{{ num_likes|pluralize }}</div>
+                                            <div class="p-2">{{idea.suggestion_set.count}} suggestion{{ idea.suggestion_set.count|pluralize }}</div>
+                                                <div class="ml-auto p-2">Share</div>
+                                                
+                                        </div>
+                                
+                                        
+                                    </div>
+                            <hr>
+                            <div class="comments ml-2">
+                                {%if idea.suggestion_set.all%}
+                                {% for sugg in idea.suggestion_set.all%}
+                                <div class="d-flex flex-row mb-2"> <img src="{{sugg.sugg_user.profile_user.profile_pic.url|default_if_none:'#'}}" width="40" height="40" class="rounded-circle">
+                                    <div class="d-flex flex-column ml-2"> <span class="name font-weight-bold">{{sugg.sugg_user}}</span>
+                                         <p class="comment-text">{{sugg.sugg_text}}</p>
+                                        <div class="d-flex flex-row align-items-center status"> <small class="p-1"><a action=href=''><i class="fa fa-heart-o"></i></a></small> <small class="p-1">{{sugg.sugg_likes}}</small><small class="p-1">posted {{sugg.sugg_date|naturaltime}}</small> </div>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                                {%else%}
+                                <div class="d-flex flex-row m-2">
+                                    <p>No suggestions</p>
+                                </div>
+                                {%endif%}
+                                <hr>
+                                <form method="post" role="form" class="post-to-timeline p-2">
+                                    {% csrf_token %}
+                                    {%render_field form.sugg_text class="form-control"%}
+                                        <div class="row media-content">
+                                            
+                                        <div class="col-sm-6 mt-2">
+                                            <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
+                                            <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
+                                            <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
+                                        </div>
+                                        <div class="col-sm-6 mt-2 text-right"><button type="submit" class="btn btn-primary">Post</button></div>
+                                        </div>
+                                   
+                                        
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endblock %}

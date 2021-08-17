@@ -1,0 +1,100 @@
+{% extends 'ideabook/base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block breadcrumb %}
+			<li class="breadcrumb-item active">Idea feed</li>
+{% endblock  %}
+{% block profileheader %}
+{% endblock %}
+{% block content %}	
+<div class="container mt-5 mb-5">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-10">
+            <div class="card make-posts shadow2">
+                
+                
+                <form method="post" role="form" class="post-to-timeline p-2">
+                    {% csrf_token %}
+                    {%render_field form.idea_text class="form-control"%}
+                        <div class="row media-content">
+                            
+                        <div class="col-sm-6 mt-2">
+                            <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
+                            <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
+                            <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
+                        </div>
+                        <div class="col-sm-6 mt-2 text-right"><button type="submit" class="btn btn-primary">Post</button></div>
+                        </div>
+                   
+                        
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    </div>
+{%if feed_ideas%}
+
+    {% for idea in feed_ideas %}
+        
+    
+<div class="container mt-5 mb-5">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-10">
+                            <div class="card posts shadow2" id={{idea.id}}>
+                                <div class="d-flex justify-content-between p-2 px-3">
+                                    <div class="d-flex flex-row align-items-center">{%if idea.idea_user.profile_user.profile_pic %} <img src="{{idea.idea_user.profile_user.profile_pic.url|default_if_none:'#'}}" width="50" height="50" class="rounded-circle rounded-image">{% else %}<img src="" width="50" height="50" class="rounded-circle rounded-image">{% endif %}
+                                        <div class="d-flex flex-column ml-2"> <span class="font-weight-bold">{{idea.idea_user.username}}</span> <small class=" mr-2">
+                                            {%if idea.edit_date%}
+                                                Edited. {{idea.idea_edit_date|naturaltime}}
+                                            {%else%}
+                                                {{idea.idea_date|naturaltime}}
+                                            {%endif%}
+                                        </small> </div>
+                                    </div>
+                            
+                                    <div class="dropdown">
+                                        <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="{% url 'edit_idea' idea.id %}">Edit</a>
+                                            <a class="dropdown-item" href="{% url 'delete_idea' idea.id %}" class="delete">Delete</a>
+                                            
+                                          </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="p-2">
+                                    <p class="text-justify post-body">{{ idea.idea_text }} </p>
+                                    <hr>
+                                    <div class="d-flex post-details">
+                                        <div class="p-2"><span id = heart>
+                                            <form action="{% url 'like_idea' idea.id %}" method="POST">
+                                                {% csrf_token %}
+                                                {%if is_liked_dict.idea.id%}
+                                                <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart" aria-hidden="true" ></i></button>
+                                                {% else %}
+                                                <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart-o" aria-hidden="true" ></i></button>
+                                                {% endif %}
+                                            </form>    
+                                        </span></div>
+                                        <div class="p-2">{{idea.num_likes}} like{{ idea.num_likes|pluralize }}</div>
+                                        <div class="p-2"><a href="{% url 'idea' idea.id %}">{{idea.suggestion_set.count}} suggestion{{ idea.suggestion_set.count|pluralize }}</a></div>
+                                            <div class="ml-auto p-2"><a href="{% url 'idea' idea.id %}">Make suggestion</a></div>
+                                            <div class="p-2">Share</div>
+                                    </div>
+                            
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+               
+        {% endfor %}
+    
+{%else%}
+<div class="container mt-5 mb-5">
+<p>No recent ideas</p>
+</div>
+{%endif%}	
+{% endblock %}

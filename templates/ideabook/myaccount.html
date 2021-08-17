@@ -1,0 +1,19 @@
+{% extends 'ideabook/feed.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block breadcrumb %}
+			<li class="breadcrumb-item active">Your posts</li>
+{% endblock  %}
+{% block profileheader %}
+<div class="container mt-5 mb-5">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-10">
+            <div class="d-flex flex-row align-items-center"> 
+              
+                <img src="{{request.user.profile_user.profile_pic.url|default_if_none:'#'}}"  width="150" class="rounded-circle p-2">
+                </div>
+                  
+            </div>
+            </div>
+            </div>
+{% endblock %}

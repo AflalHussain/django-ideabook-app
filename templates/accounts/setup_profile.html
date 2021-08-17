@@ -1,0 +1,40 @@
+{% extends 'ideabook/base.html' %}
+{% load widget_tweaks %}
+{%load static%}
+{% block stylesheet %}
+<link rel="stylesheet" href="{%static 'css/accounts.css' %}">
+{% endblock %}
+
+{% block body %}
+        <div class="container">
+    <h1 class="text-center logo my-4">
+      <a href="{% url 'feed' %}">IDEABooK</a>
+    </h1>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Profile Setup</h3>
+            <hr class="my-3">
+            <div class="d-flex flex-row align-items-center"> 
+            <div class="p-3">
+            <img src="{{request.user.profile_user.profile_pic.url|default_if_none:'#'}}"  width="150" height="150"  class="rounded-circle rounded-image p-2">
+          </div>
+            
+            
+            <form method="post" enctype="multipart/form-data">
+              <p>Username : {{request.user.username}}</p>
+              {% csrf_token %}
+              {{form.as_p}}
+              <button type="submit" class="btn btn-primary btn-block">Set Profile Picture</button>
+            </form>
+          </div>
+          </div>
+            <div class="card-footer text-muted text-center">
+              set up later? <a href="{%url 'feed' %}">Go to feed</a>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        {% endblock %}

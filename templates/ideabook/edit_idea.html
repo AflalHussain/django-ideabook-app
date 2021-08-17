@@ -1,0 +1,38 @@
+{% extends 'ideabook/base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block breadcrumb %}
+			<li class="breadcrumb-item active">Idea editor</li>
+{% endblock  %}
+{% block content %}	
+        <div class="container mt-5 mb-5">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-md-10">
+                    <div class="card posts shadow2" id="{{idea.id}}">
+                        <div class="d-flex justify-content-between p-2 px-3">
+                            <div class="d-flex flex-row align-items-center"> <img src="{{idea.idea_user.profile_user.profile_pic.url|default_if_none:'#'}}" width="50" height="50" class="rounded-circle">
+                                <div class="d-flex flex-column ml-2"> <span class="font-weight-bold">{{idea.idea_user}}</span> <small class="mr-2">{{idea.idea_date|naturaltime}}</small> </div>
+                            </div>
+                            </div>
+                            <form method="post" role="form" class="post-to-timeline p-2">
+                                {% csrf_token %}
+                                {%render_field form.idea_text class="form-control"%}
+                                    <div class="row media-content">
+                                        
+                                    <div class="col-sm-6 mt-2">
+                                        <a class="btn btn-sm btn-default"><i class="fa fa-camera"></i></a>
+                                        <a class="btn btn-sm btn-default"><i class="fa fa-video-camera"></i></a>
+                                        <a class="btn btn-sm btn-default"><i class="fa fa-map-marker"></i></a>
+                                    </div>
+                                    <div class="col-sm-6 mt-2 text-right"><button type="submit" class="btn btn-primary">Post</button></div>
+                                    </div>
+                               
+                                    
+                            </form>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endblock %}
