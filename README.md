@@ -6,7 +6,7 @@ still a lot more features to be added.
 - Signup
 - Login
 - Setup profile
-- Make posts and share
+- Make and share posts, edit and delete posts 
 - Make suggestions to others ideas
 - Like ideas and suggestions
 
