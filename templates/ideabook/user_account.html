@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% load humanize %}
 {% block breadcrumb %}
-			<li class="breadcrumb-item active">Your posts</li>
+			<li class="breadcrumb-item active">{%if request.user.username == acc_user.username%}Your{%else%}{{acc_user.username}}'s{%endif%} posts</li>
 {% endblock  %}
 {% block profileheader %}
 <div class="container mt-5 mb-5">

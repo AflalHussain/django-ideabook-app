@@ -31,7 +31,7 @@
                                                 <form action="{% url 'like_idea' idea.id %}" method="POST">
                                                     {% csrf_token %}
                                                     {%if is_liked%}
-                                                    <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart" aria-hidden="true" ></i></button>
+                                                    <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart liked" aria-hidden="true" ></i></button>
                                                     {% else %}
                                                     <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart-o" aria-hidden="true" ></i></button>
                                                     {% endif %}
@@ -49,10 +49,19 @@
                             <div class="comments ml-2">
                                 {%if idea.suggestion_set.all%}
                                 {% for sugg in idea.suggestion_set.all%}
-                                <div class="d-flex flex-row mb-2"> <img src="{{sugg.sugg_user.profile_user.profile_pic.url|default_if_none:'#'}}" width="40" height="40" class="rounded-circle">
+                                <div class="d-flex flex-row mb-2" id={{sugg.id}}> <img src="{{sugg.sugg_user.profile_user.profile_pic.url|default_if_none:'#'}}" width="40" height="40" class="rounded-circle">
                                     <div class="d-flex flex-column ml-2"> <span class="name font-weight-bold">{{sugg.sugg_user}}</span>
                                          <p class="comment-text">{{sugg.sugg_text}}</p>
-                                        <div class="d-flex flex-row align-items-center status"> <small class="p-1"><a action=href=''><i class="fa fa-heart-o"></i></a></small> <small class="p-1">{{sugg.sugg_likes}}</small><small class="p-1">posted {{sugg.sugg_date|naturaltime}}</small> </div>
+                                        <div class="d-flex flex-row align-items-center status"> <small><span id="heart">
+                                            <form action="{% url 'like_sugg' sugg.id %}" method="POST">
+                                                {% csrf_token %}
+                                                {%if sugg.id in liked_sugg%}
+                                                <button type="submit" name="sugg_id" value="{{sugg.id}}" class="btn"><i class="fa fa-heart liked" aria-hidden="true" ></i></button>
+                                                {% else %}
+                                                <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart-o" aria-hidden="true" ></i></button>
+                                                {% endif %}
+                                            </form>    
+                                        </span></small> <small class="p-1">{{sugg.num_likes}}</small><small class="p-1">posted {{sugg.sugg_date|naturaltime}}</small> </div>
                                     </div>
                                 </div>
                                 {%endfor%}

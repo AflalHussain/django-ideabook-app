@@ -1,0 +1,52 @@
+{% extends 'ideabook/base.html' %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block breadcrumb %}
+			<li class="breadcrumb-item active">Search results</li>
+{% endblock  %}
+{% block content %}	
+        <div class="container mt-5 mb-5">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-md-10">
+                    <div class="card posts shadow2">
+                        {% if submitbutton == 'Search' and request.GET.q != '' %}
+                        {% if results %}
+                        <div class="d-flex justify-content-between p-2 px-3">
+                        <h5>Results for <b>"{{ request.GET.q }}"</b></h5>
+                    </div>
+                        <hr>
+                            <div class="comments ml-2">
+                        {% for user in results %}
+                        <div class="d-flex flex-row align-items-center p-2">{%if user.profile_user.profile_pic %} <img src="{{user.profile_user.profile_pic.url|default_if_none:'#'}}" width="60" height="60" class="rounded-circle rounded-image">{% else %}<img src="" width="50" height="50" class="rounded-circle rounded-image">{% endif %}
+                            <a href="{%url 'user_account' user.id %}" class="custom-card">
+                            <div class="d-flex flex-column ml-2 p-2"> <span class="font-weight-bold">{{user.username}}</span> <small class=" mr-2">   
+                            </small> </div>
+                        </a>
+                        <div class="follow-button">
+                            <form action="{% url 'follow' user.id %}" method="POST">
+                                {% csrf_token %}
+                                {%if user in following_list%}
+                                <button type="submit" class="btn btn-primary btn-sm ">Unfollow <i class="fa fa-user-times" aria-hidden="true"></i></i></button>
+                                {% else %}
+                                <button type="submit" class="btn btn-secondary btn-sm">Follow <i class="fa fa-user-plus" aria-hidden="true"></i></button>
+                                {% endif %}
+                            </form> 
+
+                            
+                        </div>
+                        </div>
+                    
+                        <hr>
+                        {% endfor %}
+                        {% else %}
+                        <p class="p-2"> No results found for "{{request.GET.q}}"</p>
+                          
+                        {% endif %}
+                        {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endblock %}

@@ -23,5 +23,9 @@ class Suggestion(models.Model):
     sugg_text=models.CharField(max_length=300)
     idea=models.ForeignKey(Idea, on_delete=models.CASCADE)
     sugg_user=models.ForeignKey(User, related_name='sugg',on_delete=models.CASCADE)
-    sugg_likes=models.IntegerField(default=0)
+    sugg_likes=models.ManyToManyField(User, related_name='sugg_likers', verbose_name=("people who liked"),default=None,blank=True)
     sugg_date=models.DateTimeField('date sugg posted',auto_now_add=True)
+    
+    @property   
+    def num_likes(self):
+        return self.sugg_likes.all().count()

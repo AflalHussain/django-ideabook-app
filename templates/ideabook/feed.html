@@ -56,9 +56,13 @@
                                     <div class="dropdown">
                                         <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {%if request.user == idea.idea_user%}
+
                                             <a class="dropdown-item" href="{% url 'edit_idea' idea.id %}">Edit</a>
                                             <a class="dropdown-item" href="{% url 'delete_idea' idea.id %}" class="delete">Delete</a>
-                                            
+                                        {%else%}
+                                        <a class="dropdown-item" href="">Report post?</a>
+                                        {%endif%}
                                           </div>
                                     </div>
                                 </div>
@@ -70,8 +74,8 @@
                                         <div class="p-2"><span id = heart>
                                             <form action="{% url 'like_idea' idea.id %}" method="POST">
                                                 {% csrf_token %}
-                                                {%if is_liked_dict.idea.id%}
-                                                <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart" aria-hidden="true" ></i></button>
+                                                {%if idea.id in liked_ideas%}
+                                                <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart liked" aria-hidden="true" ></i></button>
                                                 {% else %}
                                                 <button type="submit" name="idea_id" value="{{idea.id}}" class="btn"><i class="fa fa-heart-o" aria-hidden="true" ></i></button>
                                                 {% endif %}
